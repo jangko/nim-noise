@@ -7,11 +7,12 @@ Nim implementation of linenoise line editor, inspired by
   * Line editing with emacs keybindings
   * History handling
   * Completion
-  * Hints
-  * Syntax Coloring
+  * Hints(work in progress)
+  * Syntax Coloring(work in progress)
   * UTF-8 aware
   * Intuitive ESC key sub menu escaping
   * A bunch of compile time switch to select which features you want to turn on/off
+  * Support Windows, Linux and Mac OS
 
 ## API
 
