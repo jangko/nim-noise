@@ -1,4 +1,7 @@
 # noise
+[![Build Status (Travis)](https://img.shields.io/travis/jangko/nim-noise/master.svg?label=Linux%20/%20macOS "Linux/macOS build status (Travis)")](https://travis-ci.org/jangko/nim-noise)
+[![Windows build status (Appveyor)](https://img.shields.io/appveyor/ci/jangko/nim-noise/master.svg?label=Windows "Windows build status (Appveyor)")](https://ci.appveyor.com/project/jangko/nim-noise)
+
 Nim implementation of linenoise line editor, inspired by
 [replxx](https://github.com/AmokHuginnsson/replxx) and
 [linenoise-ng](https://github.com/arangodb/linenoise-ng)
