@@ -71,8 +71,8 @@ install:
       cd csources &
       ( IF "%PLATFORM%" == "x64" ( build64.bat > nul ) else ( build.bat > nul ) ) &
       cd .. &
-      bin\nim c --verbosity:0 --hinst:off koch &
-      koch boot -d:release --verbosity:0 --hinst:off &
+      bin\nim c --verbosity:0 --hints:off koch &
+      koch boot -d:release --verbosity:0 --hints:off &
       koch nimble > nul &
       git rev-parse HEAD > ver.txt &
       rmdir /s /q csources
