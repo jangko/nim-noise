@@ -2,7 +2,7 @@
 [![Build Status (Travis)](https://img.shields.io/travis/jangko/nim-noise/master.svg?label=Linux%20/%20macOS "Linux/macOS build status (Travis)")](https://travis-ci.org/jangko/nim-noise)
 [![Windows build status (Appveyor)](https://img.shields.io/appveyor/ci/jangko/nim-noise/master.svg?label=Windows "Windows build status (Appveyor)")](https://ci.appveyor.com/project/jangko/nim-noise)
 
-Nim implementation of linenoise line editor, inspired by
+Nim implementation of linenoise command line editor, inspired by
 [replxx](https://github.com/AmokHuginnsson/replxx) and
 [linenoise-ng](https://github.com/arangodb/linenoise-ng)
 
@@ -10,12 +10,15 @@ Nim implementation of linenoise line editor, inspired by
   * Line editing with emacs keybindings
   * History handling
   * Completion
-  * Hints(work in progress)
-  * Syntax Coloring(work in progress)
   * UTF-8 aware
   * Intuitive ESC key sub menu escaping
-  * A bunch of compile time switch to select which features you want to turn on/off
+  * A bunch of compile time switches to select which features you want to turn on/off
   * Support Windows, Linux and Mac OS
+
+## Planned Features
+  * Hints(work in progress)
+  * Syntax coloring(work in progress)
+  * Advanced history search(work in progress)
 
 ## API
 
@@ -44,6 +47,8 @@ PreloadBuffer API:
 
 ## Examples
 ```Nim
+import noise, strutils
+
 proc main() =
   var noise = Noise.init()
 
@@ -90,26 +95,38 @@ main()
 ```text
   # Completion
     CTRL-I/TAB                   activates completion
+       TAB again                 rotate between completion alternatives
+       ESC                       undo changes and exit to normal editing
+       Other keys                accept completion and resume to normal editing
+
   # History
     CTRL-P, UP_ARROW_KEY         recall previous line in history
     CTRL-N, DOWN_ARROW_KEY       recall next line in history
-    CTRL-R                       reverse history search
-    CTRL-S                       forward history search
     ALT-<, PAGE_UP_KEY           beginning of history
     ALT->, PAGE_DOWN_KEY         end of history
-  # Kill and Yank
-    ALT-d, ALT-D:                kill word to right of cursor
-    ALT + Backspace:             kill word to left of cursor
+
+  # Advanced history search
+    CTRL-R, CTRL-S               reverse/reverse interactive history search
+       TAB                       rotate between history alternatives
+       ESC                       cancel selection and exit to normal editing
+       Other keys                accept selected history
+
+  # Kill and yank
+    ALT-d, ALT-D                 kill word to right of cursor
+    ALT + Backspace              kill word to left of cursor
     CTRL-K                       kill from cursor to end of line
     CTRL-U                       kill all characters to the left of the cursor
     CTRL-W                       kill to whitespace (not word) to left of cursor
     CTRL-Y                       yank killed text
-    ALT-y, ALT-Y                 'yank-pop', rotate popped text
+       ALT-y, ALT-Y              'yank-pop', rotate popped text
+
   # Word editing
-    ALT-c, ALT-C                 give word initial Cap
+    ALT-c, ALT-C                 give word initial cap
     ALT-l, ALT-L                 lowercase word
     CTRL-T                       transpose characters
     ALT-u, ALT-U                 uppercase word
+
+  # Cursor navigation
     CTRL-A, HOME_KEY             move cursor to start of line
     CTRL-E, END_KEY              move cursor to end of line
     CTRL-B, LEFT_ARROW_KEY       move cursor left by one character
@@ -119,7 +136,8 @@ main()
     ALT + RIGHT_ARROW_KEY        move cursor right by one word
     ALT-b, ALT-B,
     CTRL + LEFT_ARROW_KEY,
-    aLT + LEFT_ARROW_KEY         move cursor left by one word
+    ALT + LEFT_ARROW_KEY         move cursor left by one word
+
   # Basic Editing
     CTRL-C                       abort this line
     CTRL-H/backspace             delete char to left of cursor
@@ -131,6 +149,7 @@ main()
 ```
 
 ## Compile time switches:
+  please use `-d:` or `--define:` during build time.
   * prompt_no_history
   * prompt_no_kill
   * prompt_no_completion
