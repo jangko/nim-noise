@@ -309,10 +309,13 @@ when promptCompletion:
     let itemLength = endIndex - startIndex
     if itemLength == 0: return ("", "", "")
 
+    template toPart(a, b: int): untyped =
+      if (b - a) <= 0: "" else: utf32to8(self.toOpenArray(a, b))
+
     result = (
-      head: if startIndex <= 0: "" else: utf32to8(self.toOpenArray(0, startIndex)),
-      word: utf32to8(self.toOpenArray(startIndex, endIndex)),
-      tail: if self.dataLen - endIndex <= 0: "" else: utf32to8(self.toOpenArray(endIndex, self.dataLen))
+      head: toPart(0, startIndex),
+      word: toPart(startIndex, endIndex),
+      tail: toPart(endIndex, self.dataLen)
     )
 
   proc updateCompletion(self: var Line, text: string) =

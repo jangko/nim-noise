@@ -18,7 +18,7 @@ Nim implementation of linenoise command line editor, inspired by
 ## Planned Features
   * Hints(work in progress)
   * Syntax coloring(work in progress)
-  * Advanced history search(work in progress)
+  * Incremental history search(work in progress)
 
 ## API
 
@@ -105,7 +105,7 @@ main()
     ALT-<, PAGE_UP_KEY           beginning of history
     ALT->, PAGE_DOWN_KEY         end of history
 
-  # Advanced history search
+  # Incremental history search
     CTRL-R, CTRL-S               reverse/reverse interactive history search
        TAB                       rotate between history alternatives
        ESC                       cancel selection and exit to normal editing
