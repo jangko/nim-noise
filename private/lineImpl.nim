@@ -1,5 +1,3 @@
-import prompt, styler
-
 when defined(windows):
   import winio
 else:
@@ -70,9 +68,9 @@ proc clearToEnd(self: var Line) =
     stdout.clearToEnd(self.prevLen)
   self.prevLen = len
 
-proc refreshLine(self: var Line) =
+proc refreshLine(self: var Line, prompt: var Prompt) =
   let
-    promptWidth = self.prompt.width
+    promptWidth = prompt.width
     screenWidth = terminalWidth()
 
   #calculate the position of the end of the input line
@@ -82,7 +80,7 @@ proc refreshLine(self: var Line) =
   var cursorPos = calcScreenPos(promptWidth, 0,
     screenWidth, self.calcColPos(self.pos))
 
-  var cursorRowMovement = self.prompt.rowOffset - self.prompt.extraLines
+  var cursorRowMovement = prompt.rowOffset - prompt.extraLines
   if cursorRowMovement > 0:
     # move the cursor up as required
     stdout.cursorUp(cursorRowMovement)
@@ -95,9 +93,10 @@ proc refreshLine(self: var Line) =
 
   stdout.writeLine(self)
 
-  # we have to generate our own newline on line wrap
-  if endOfInput.x == 0 and endOfInput.y > 0:
-    stdout.write "\n"
+  when not defined(windows):
+    # we have to generate our own newline on line wrap
+    if endOfInput.x == 0 and endOfInput.y > 0:
+      stdout.write "\n"
 
   # position the cursor
   cursorRowMovement = endOfInput.y - cursorPos.y
@@ -112,7 +111,10 @@ proc refreshLine(self: var Line) =
   stdout.flushFile()
 
   # remember row for next pass
-  self.prompt.rowOffset = self.prompt.extraLines + cursorPos.y
+  prompt.rowOffset = prompt.extraLines + cursorPos.y
+
+template refreshLine(self: var Line) =
+  self.refreshLine(self.prompt)
 
 proc moveCursorLeft(self: var Line, move: CursorMove) =
   case move
@@ -265,14 +267,32 @@ when promptKill:
     inc(self.dataLen, charCount - lastSize)
 
     if truncated: beep()
-    self.refreshLine()
+    self.refreshLine
     charCount
 
 when promptHistory:
-  proc update(self: var Line, text: string) =
+  proc clearTextAndPrompt(self: var Line, prompt: var Prompt) =
+    for _ in 0 ..< prompt.rowOffset:
+      stdout.eraseLine()
+      stdout.cursorUp(1)
+    stdout.eraseLine()
+
+  proc dynamicRefresh(self: var Line, prompt: var Prompt, screenWidth: int) =
+    let promptWidth = prompt.width
+
+    var endOfInput = calcScreenPos(promptWidth, 0,
+      screenWidth, self.calcColPos(self.dataLen))
+
+    prompt.show()
+    stdout.writeLine(self)
+    stdout.flushFile()
+
+    prompt.rowOffset = prompt.extraLines + endOfInput.y
+
+  proc update(self: var Line, text: string, prevPos: int = 0) =
     if text.len > 0:
       self.dataLen = text.utf8to32(self.data)
-      self.pos = self.dataLen
+      self.pos = if prevPos != 0: prevPos else: self.dataLen
     else:
       self.pos = 0
       self.dataLen = 0
@@ -354,7 +374,7 @@ when promptWordEditing:
         if unicode.isAlpha(self.data[self.pos].Rune):
           self.data[self.pos] = toLower(self.data[self.pos].Rune).char32
         inc self.pos
-      self.refreshLine()
+      self.refreshLine
 
   proc upperCase(self: var Line) =
     if self.pos < self.dataLen:
@@ -364,7 +384,7 @@ when promptWordEditing:
         if unicode.isAlpha(self.data[self.pos].Rune):
           self.data[self.pos] = toUpper(self.data[self.pos].Rune).char32
         inc self.pos
-      self.refreshLine()
+      self.refreshLine
 
   proc lowerCase(self: var Line) =
     if self.pos < self.dataLen:
@@ -374,14 +394,14 @@ when promptWordEditing:
         if unicode.isAlpha(self.data[self.pos].Rune):
           self.data[self.pos] = toLower(self.data[self.pos].Rune).char32
         inc self.pos
-      self.refreshLine()
+      self.refreshLine
 
   proc transposeChar(self: var Line) =
     if self.pos > 0 and self.dataLen > 1:
       let pos = if self.pos == self.dataLen: self.pos - 2 else: self.pos - 1
       swap(self.data[pos], self.data[pos + 1])
       if self.pos != self.dataLen: inc self.pos
-      self.refreshLine()
+      self.refreshLine
 
 proc setPrompt(self: var Line, text: Styler, screenWidth: int) =
   self.prompt.recalculate(text, screenWidth)

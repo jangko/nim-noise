@@ -105,6 +105,11 @@ proc commonPrefixSearch*(self: var History, prefix: string, back: bool): bool =
         self.index = i
         return true
 
+proc find*(self: var History, text: string, output: var seq[string]) =
+  for c in self.data:
+    if c.find(text) != -1:
+      output.add c
+
 proc popLast*(self: var History) =
   if self.available():
     discard self.data.pop()

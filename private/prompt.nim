@@ -2,17 +2,15 @@ import styler
 
 type
   Prompt* = object
-    text: Styler        # our copy of the prompt text, edited
-    numChars: int       # chars in promptText
+    text*: Styler        # our copy of the prompt text, edited
+    numChars*: int      # chars in promptText
     extraLines*: int    # extra lines (beyond 1) occupied by prompt
     width*: int         # column offset to end of prompt
-    lastLinePos: int    # index into promptText where last line begins
     rowOffset*: int     # where the cursor is relative to the start of the prompt
 
 proc recalculate*(p: var Prompt, text: Styler, screenWidth: int) =
   p.numChars = 0
   p.extraLines = 0
-  p.lastLinePos = 0
   p.text = text
   p.width = 0
 
@@ -24,11 +22,11 @@ proc recalculate*(p: var Prompt, text: Styler, screenWidth: int) =
       if '\n'.ord == c or x >= screenWidth:
         x = 0
         inc p.extraLines
-        p.lastLinePos = p.numChars
         p.width = 0
-      inc(p.width, w)
-  
-  p.rowOffset = p.extraLines  
+      else:
+        inc(p.width, w)
+
+  p.rowOffset = p.extraLines
 
 proc show*(p: Prompt) =
   if not p.text.isNil:

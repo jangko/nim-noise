@@ -12,13 +12,13 @@ Nim implementation of linenoise command line editor, inspired by
   * Completion
   * UTF-8 aware
   * Intuitive ESC key sub menu escaping
+  * Incremental history search
   * A bunch of compile time switches to select which features you want to turn on/off
   * Support Windows, Linux and Mac OS
 
 ## Planned Features
   * Hints(work in progress)
   * Syntax coloring(work in progress)
-  * Incremental history search(work in progress)
 
 ## API
 
@@ -28,6 +28,7 @@ Basic API:
 * proc getLine*(self: var Noise): string
 * proc readLine*(self: var Noise): bool
 * proc setPrompt*(self: var Noise, text: Styler)
+* proc setPrompt*(self: var Noise, text: string)
 
 History API:
 * proc historyAdd*(self: var Noise, line: string)
@@ -99,7 +100,7 @@ main()
   # Completion
     CTRL-I/TAB                   activates completion
        TAB again                 rotate between completion alternatives
-       ESC                       undo changes and exit to normal editing
+       ESC, CTRL-C               undo changes and exit to normal editing
        Other keys                accept completion and resume to normal editing
 
   # History
@@ -111,33 +112,33 @@ main()
   # Incremental history search
     CTRL-R, CTRL-S               forward/reverse interactive history search
        TAB                       rotate between history alternatives
-       ESC                       cancel selection and exit to normal editing
+       ESC, CTRL-C               cancel selection and exit to normal editing
        Other keys                accept selected history
 
   # Kill and yank
-    ALT-d, ALT-D                 kill word to right of cursor
+    ALT-D                        kill word to right of cursor
     ALT + Backspace              kill word to left of cursor
     CTRL-K                       kill from cursor to end of line
     CTRL-U                       kill all characters to the left of the cursor
     CTRL-W                       kill to whitespace (not word) to left of cursor
     CTRL-Y                       yank killed text
-       ALT-y, ALT-Y              'yank-pop', rotate popped text
+       ALT-Y                    'yank-pop', rotate popped text
 
   # Word editing
-    ALT-c, ALT-C                 give word initial cap
-    ALT-l, ALT-L                 lowercase word
+    ALT-C                        give word initial cap
+    ALT-L                        lowercase word
     CTRL-T                       transpose characters
-    ALT-u, ALT-U                 uppercase word
+    ALT-U                        uppercase word
 
   # Cursor navigation
     CTRL-A, HOME_KEY             move cursor to start of line
     CTRL-E, END_KEY              move cursor to end of line
     CTRL-B, LEFT_ARROW_KEY       move cursor left by one character
     CTRL-F, RIGHT_ARROW_KEY      move cursor right by one character
-    ALT-f, ALT-F,
+    ALT-F,
     CTRL + RIGHT_ARROW_KEY,
     ALT + RIGHT_ARROW_KEY        move cursor right by one word
-    ALT-b, ALT-B,
+    ALT-B,
     CTRL + LEFT_ARROW_KEY,
     ALT + LEFT_ARROW_KEY         move cursor left by one word
 

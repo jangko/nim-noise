@@ -1,4 +1,4 @@
-import private/[basic, wcwidth, wtf8, styler], terminal, strutils
+import private/[basic, wcwidth, wtf8, styler, prompt], terminal, strutils
 
 export styler, terminal
 
@@ -183,6 +183,11 @@ proc readLine*(self: var Noise): bool =
 
 proc setPrompt*(self: var Noise, text: Styler) =
   self.line.setPrompt(text, self.screenWidth)
+
+proc setPrompt*(self: var Noise, text: string) =
+  var prompt = newStyler()
+  prompt.addCmd(text)
+  self.line.setPrompt(prompt, self.screenWidth)
 
 when promptHistory:
   proc historyAdd*(self: var Noise, line: string) =

@@ -21,7 +21,7 @@ when promptCompletion:
           index = 0
         self.line.updateCompletion(parts.head &
           self.completionStrings[index] & parts.tail)
-      of ESC_KEY:
+      of ESC_KEY, ctrlChar('C'):
         self.line.updateCompletion(line)
         result = 0
         break
@@ -37,17 +37,138 @@ when promptCompletion:
     # ctrl-I/tab, command completion, needs to be before switch statement
     if c == ctrlChar('I') and self.completionHook != nil:
       # completeLine does the actual completion and replacement
-      var c = self.completeLine()
-      self.terminatingKeyStroke = c
+      let key = self.completeLine()
+      self.terminatingKeyStroke = key
 
-      if c <= 0: # return on error
+      if key <= 0: # return on error/cancel
         return editContinue
 
       # deliberate fall-through here, so we use the terminating character
 
 when promptHistory:
+  proc terminatingKey(c: char32): bool =
+    const keys = [ctrlChar('P'), UP_ARROW_KEY, ctrlChar('N'),  DOWN_ARROW_KEY, ctrlChar('R'), ctrlChar('S'),
+      altChar('<'), PAGE_UP_KEY, altChar('>'), PAGE_DOWN_KEY, altChar('d'), altChar('D'), META + ctrlChar('H'),
+      ctrlChar('K'), ctrlChar('U'), ctrlChar('W'), ctrlChar('Y'), altChar('y'), altChar('Y'), altChar('c'),
+      altChar('C'), altChar('l'), altChar('L'), ctrlChar('T'), altChar('u'), altChar('U'), ctrlChar('A'), HOME_KEY,
+      ctrlChar('E'), END_KEY, ctrlChar('B'), LEFT_ARROW_KEY, ctrlChar('F'), RIGHT_ARROW_KEY, altChar('f'),
+      altChar('F'), CTRL + RIGHT_ARROW_KEY, META + RIGHT_ARROW_KEY, altChar('b'), altChar('B'),
+      CTRL + LEFT_ARROW_KEY, META + LEFT_ARROW_KEY, 127, DELETE_KEY, ctrlChar('D'),
+      ctrlChar('J'), ctrlChar('M'), ctrlChar('L')
+    ]
+    for x in keys:
+      if x == c:
+        return true
+    result = false
+
+  type
+    Search = object
+      data: seq[char32]
+      dataLen: int
+      output: seq[string]
+      dirty: bool
+      index: int
+
+  proc initSearch(maxLen: int = 50): Search =
+    result.dataLen = 0
+    result.output = @[]
+    result.data = newSeq[char32](maxLen)
+    result.dirty = false
+
+  proc addOneChar(self: var Search, c: char32) =
+    template beepAndReturn() =
+      beep()
+      return
+
+    # beep on unknown Ctrl and/or Meta keys
+    if (c and (META or CTRL)) != 0: beepAndReturn()
+
+    # buffer is full, beep on new characters
+    if self.dataLen >= self.data.len: beepAndReturn()
+
+    # don't insert control characters
+    if isControlChar(c): beepAndReturn()
+
+    if self.dataLen < self.data.len:
+      self.data[self.dataLen] = c
+      inc self.dataLen
+      self.dirty = true
+
+  proc removeOneChar(self: var Search) =
+    if self.dataLen > 0:
+      dec self.dataLen
+      self.dirty = true
+
+  proc refreshLine(self: var Noise, search: var Search, prompt: var Prompt) =
+    self.line.clearTextAndPrompt(prompt)
+    let word = utf32to8(search.data, search.dataLen)
+
+    if search.dirty:
+      search.output.setLen(0)
+      if word.len > 0:
+        self.history.find(word, search.output)
+
+    if search.output.len > 0:
+      if search.index >= search.output.len:
+        search.index = 0
+      self.line.dataLen = utf8to32(search.output[search.index], self.line.data)
+    else:
+      self.line.dataLen = 0
+
+    let number = if search.output.len == 0: "?" else:
+      $(search.index+1) & "/" & $search.output.len
+
+    let text = "[" & number & "]'" & word & "'> "
+    prompt.text.update(0, text)
+    prompt.recalculate(prompt.text, self.screenWidth)
+    self.line.dynamicRefresh(prompt, self.screenWidth)
+
   proc incrementalHistorySearch(self: var Noise, c: char32): char32 =
-    discard
+    # clear prompt and current buffer
+    stdout.hideCursor()
+    self.line.clearTextAndPrompt(self.line.prompt)
+    let
+      prevLine = self.line.getLine()
+      prevPos = self.line.pos
+    self.line.resetBuffer()
+
+    var search = initSearch()
+    var prompt: Prompt
+    var styler = newStyler()
+    styler.addCmd("[?]''> ")
+    prompt.recalculate(styler, self.screenWidth)
+    self.line.dynamicRefresh(prompt, self.screenWidth)
+
+    while true:
+      var c = readChar()
+      c = c.cleanupCtrl
+      if c.terminatingKey:
+        self.line.clearTextAndPrompt(prompt)
+        self.line.prompt.show()
+        self.line.prompt.genNewLine()
+        if search.output.len > 0:
+          self.line.update(search.output[search.index])
+        result = c
+        break
+
+      case c
+      of ctrlChar('I'):
+        search.dirty = false
+        inc search.index
+        self.refreshLine(search, prompt)
+      of ESC_KEY, ctrlChar('C'):
+        self.line.clearTextAndPrompt(prompt)
+        self.line.prompt.show()
+        self.line.prompt.genNewLine()
+        self.line.update(prevLine, prevPos)
+        result = 0
+        break
+      of ctrlChar('H'):
+        removeOneChar(search)
+        self.refreshLine(search, prompt)
+      else:
+        addOnechar(search, c)
+        self.refreshLine(search, prompt)
 
   proc historySearch(self: var Noise, c: char32): EditMode {.cdecl.} =
     template historyAction(cmd: untyped): untyped =
@@ -71,7 +192,10 @@ when promptHistory:
       # ctrl-S, forward history search
       if self.history.atBottom() and not self.historyCallRecent:
         self.history.updateLast(self.line.getLine())
-      self.terminatingKeyStroke = self.incrementalHistorySearch(c)
+      let key = self.incrementalHistorySearch(c)
+      self.terminatingKeyStroke = key
+      if key <= 0: # return on error/cancel
+        return editContinue
     of altChar('<'), PAGE_UP_KEY:
       # meta-<, beginning of history
       # Page Up, beginning of history
