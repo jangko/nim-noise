@@ -13,6 +13,8 @@ Nim implementation of linenoise command line editor, inspired by
   * UTF-8 aware
   * Intuitive ESC key sub menu escaping
   * Incremental history search
+  * Support multiline editing out of the box
+  * Support multiline prompt with color and unicode characters
   * A bunch of compile time switches to select which features you want to turn on/off
   * Support Windows, Linux and Mac OS
 
