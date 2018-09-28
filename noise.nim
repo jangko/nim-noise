@@ -188,7 +188,7 @@ when promptHistory:
   proc historyAdd*(self: var Noise, line: string) =
     self.history.add line
 
-  proc historySetMaxLen*(self: var Noise, len: int): bool =
+  proc historySetMaxLen*(self: var Noise, len: int) =
     self.history.setMaxLen(len)
 
   iterator histories*(self: var Noise): string =
@@ -249,3 +249,7 @@ when promptPreloadBuffer:
     if truncated:
       self.preloadError.add " [Edited line: the line length was reduced from "
       self.preloadError.add "$1 to $1\n" % [$temp.len, $(PROMPT_MAX_LINE - 1)]
+
+when promptKill:
+  proc killSetMaxLen*(self: var Noise, len: int) =
+    self.killRing.setMaxLen(len)

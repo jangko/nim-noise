@@ -32,12 +32,12 @@ proc add*(self: var History, line: string) =
   self.data.add lineCopy
   self.index = self.data.len - 1
 
-proc setMaxLen*(self: var History, len: int) =
-  if len < 1: return
-  if self.data.len > len:
-    self.data.setLen(len)
+proc setMaxLen*(self: var History, maxLen: int) =
+  if maxLen < 1: return
+  if self.data.len > maxLen:
+    self.data.setLen(maxLen)
     self.index = self.data.len - 1
-  self.maxLen = len
+  self.maxLen = maxLen
 
 iterator items*(self: var History): string =
   for h in self.data:

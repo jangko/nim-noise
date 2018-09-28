@@ -22,6 +22,14 @@ proc init*(x: typedesc[KillRing]): KillRing =
   result.data    = initDeque[string](nextPowerOfTwo(result.maxLen))
   result.lastAct = actionOther
 
+proc setMaxLen*(self: var KillRing, maxLen: int) =
+  if maxLen < 1: return
+  self.data.maxLen = maxLen
+  while self.data.len >= maxLen:
+    self.data.popLast
+  if self.index >= self.data.len:
+    self.index = self.data.len - 1
+
 proc kill*(self: var KillRing, killedText: string, forward: bool) =
   if killedText.len == 0: return
 

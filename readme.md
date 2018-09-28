@@ -31,7 +31,7 @@ Basic API:
 
 History API:
 * proc historyAdd*(self: var Noise, line: string)
-* proc historySetMaxLen*(self: var Noise, len: int): bool
+* proc historySetMaxLen*(self: var Noise, len: int)
 * iterator histories*(self: var Noise): string
 * iterator historyPairs*(self: var Noise): (int, string)
 * proc historySave*(self: var Noise, fileName: string): bool
@@ -44,6 +44,9 @@ Completion API:
 
 PreloadBuffer API:
 * proc preloadBuffer*(self: var Noise, preloadText: string)
+
+KillRing API:
+* proc killSetMaxLen*(self: var Noise, len: int)
 
 ## Examples
 ```Nim
@@ -106,7 +109,7 @@ main()
     ALT->, PAGE_DOWN_KEY         end of history
 
   # Incremental history search
-    CTRL-R, CTRL-S               reverse/reverse interactive history search
+    CTRL-R, CTRL-S               forward/reverse interactive history search
        TAB                       rotate between history alternatives
        ESC                       cancel selection and exit to normal editing
        Other keys                accept selected history
@@ -149,9 +152,15 @@ main()
 ```
 
 ## Compile time switches:
-  please use `-d:` or `--define:` during build time.
+  Please use `-d:` or `--define:` during build time.
   * prompt_no_history
   * prompt_no_kill
   * prompt_no_completion
   * prompt_no_word_editing
   * prompt_no_preload_buffer
+
+  Altough you can use `killSetMaxLen` and `historySetMaxLen` at runtime,
+  there are compile time options to set them too. e.g. `-d:DefaultHistoryMaxLen=150`
+
+  * DefaultHistoryMaxLen
+  * DefaultKillRingMaxLen

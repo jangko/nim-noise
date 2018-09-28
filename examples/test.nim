@@ -11,7 +11,7 @@ proc printHelp() =
   echo "  CTRL-N, DOWN_ARROW_KEY       recall next line in history"
   echo "  ALT-<, PAGE_UP_KEY           beginning of history"
   echo "# Incremental history search"
-  echo "  CTRL-R, CTRL-S               reverse/reverse interactive history search"
+  echo "  CTRL-R, CTRL-S               forward/reverse interactive history search"
   echo "     TAB                       rotate between history alternatives"
   echo "     ESC                       cancel selection and exit to normal editing"
   echo "     Other keys                accept selected history"
