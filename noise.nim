@@ -1,3 +1,11 @@
+#
+#           nim-noise
+#        (c) Copyright 2018 Andri Lim
+#
+#    See the file "LICENSE", included in this
+#    distribution, for details about the copyright.
+#
+
 import private/[basic, wcwidth, wtf8, styler, prompt], terminal, strutils
 
 export styler, terminal

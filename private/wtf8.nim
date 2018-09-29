@@ -1,7 +1,7 @@
 # Copyright(c) 2016 Andri Lim
 #
 # Distributed under the MIT license
-# (See accompanying file LICENSE.txt)
+# (See accompanying file LICENSE)
 #
 # Nim version of wtf8 originally written by Bjoern Hoehrmann
 #

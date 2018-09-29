@@ -1,3 +1,11 @@
+#
+#           nim-noise
+#        (c) Copyright 2018 Andri Lim
+#
+#    See the file "LICENSE", included in this
+#    distribution, for details about the copyright.
+#
+
 import wtf8, wcwidth, macros, terminal, colors, basic
 
 when defined(windows):

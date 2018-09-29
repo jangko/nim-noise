@@ -1,3 +1,11 @@
+#
+#           nim-noise
+#        (c) Copyright 2018 Andri Lim
+#
+#    See the file "LICENSE", included in this
+#    distribution, for details about the copyright.
+#
+
 when defined(windows):
   import winio
 else:
