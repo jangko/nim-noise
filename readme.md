@@ -1,6 +1,8 @@
 # noise
 [![Build Status (Travis)](https://img.shields.io/travis/jangko/nim-noise/master.svg?label=Linux%20/%20macOS "Linux/macOS build status (Travis)")](https://travis-ci.org/jangko/nim-noise)
 [![Windows build status (Appveyor)](https://img.shields.io/appveyor/ci/jangko/nim-noise/master.svg?label=Windows "Windows build status (Appveyor)")](https://ci.appveyor.com/project/jangko/nim-noise)
+![nimble](https://img.shields.io/badge/available%20on-nimble-yellow.svg?style=flat-square)
+![license](https://img.shields.io/github/license/citycide/cascade.svg?style=flat-square)
 
 Nim implementation of linenoise command line editor, inspired by
 [replxx](https://github.com/AmokHuginnsson/replxx) and
@@ -167,3 +169,6 @@ main()
 
   * DefaultHistoryMaxLen
   * DefaultKillRingMaxLen
+
+## Installation via nimble
+> nimble install noise
