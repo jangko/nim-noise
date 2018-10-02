@@ -6,7 +6,7 @@
 #    distribution, for details about the copyright.
 #
 
-import private/[basic, wcwidth, wtf8, styler, prompt], terminal, strutils
+import noise/[basic, wcwidth, wtf8, styler, prompt], terminal, strutils
 
 export styler, terminal
 
@@ -17,7 +17,7 @@ const
   promptWordEditing* = not defined(prompt_no_word_editing)
   promptPreloadBuffer* = not defined(prompt_no_preload_buffer)
 
-include private/lineImpl
+include noise/lineImpl
 
 type
   KeyType* = enum
@@ -58,7 +58,7 @@ type
     line: Line
     procs: seq[EditProc]
 
-include private/editorImpl
+include noise/editorImpl
 
 proc init*(x: typedesc[Noise]): Noise =
   result.line = Line.init()
