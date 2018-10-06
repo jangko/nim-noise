@@ -278,7 +278,7 @@ when promptKill:
     self.refreshLine
     charCount
 
-when promptHistory:
+when promptIncrementalHistorySearch:
   proc clearTextAndPrompt(self: var Line, prompt: var Prompt) =
     for _ in 0 ..< prompt.rowOffset:
       stdout.eraseLine()
@@ -297,6 +297,7 @@ when promptHistory:
 
     prompt.rowOffset = prompt.extraLines + endOfInput.y
 
+when promptHistory:
   proc update(self: var Line, text: string, prevPos: int = 0) =
     if text.len > 0:
       self.dataLen = text.utf8to32(self.data)

@@ -53,9 +53,9 @@ when promptCompletion:
 
       # deliberate fall-through here, so we use the terminating character
 
-when promptHistory:
+when promptIncrementalHistorySearch:
   proc terminatingKey(c: char32): bool =
-    const keys = [ctrlChar('P'), UP_ARROW_KEY, ctrlChar('N'),  DOWN_ARROW_KEY, ctrlChar('R'), ctrlChar('S'),
+    const keys = [ctrlChar('P'), ctrlChar('N'), ctrlChar('R'), ctrlChar('S'),
       altChar('<'), PAGE_UP_KEY, altChar('>'), PAGE_DOWN_KEY, altChar('d'), altChar('D'), META + ctrlChar('H'),
       ctrlChar('K'), ctrlChar('U'), ctrlChar('W'), ctrlChar('Y'), altChar('y'), altChar('Y'), altChar('c'),
       altChar('C'), altChar('l'), altChar('L'), ctrlChar('T'), altChar('u'), altChar('U'), ctrlChar('A'), HOME_KEY,
@@ -119,6 +119,8 @@ when promptHistory:
     if search.output.len > 0:
       if search.index >= search.output.len:
         search.index = 0
+      if search.index < 0:
+        search.index = search.output.len - 1
       self.line.dataLen = utf8to32(search.output[search.index], self.line.data)
     else:
       self.line.dataLen = 0
@@ -160,9 +162,13 @@ when promptHistory:
         break
 
       case c
-      of ctrlChar('I'):
+      of ctrlChar('I'), DOWN_ARROW_KEY:
         search.dirty = false
         inc search.index
+        self.refreshLine(search, prompt)
+      of UP_ARROW_KEY:
+        search.dirty = false
+        dec search.index
         self.refreshLine(search, prompt)
       of ESC_KEY, ctrlChar('C'):
         self.line.clearTextAndPrompt(prompt)
@@ -178,6 +184,7 @@ when promptHistory:
         addOnechar(search, c)
         self.refreshLine(search, prompt)
 
+when promptHistory:
   proc historySearch(self: var Noise, c: char32): EditMode {.cdecl.} =
     template historyAction(cmd: untyped): untyped =
       if self.history.available:
@@ -190,20 +197,24 @@ when promptHistory:
 
     case c
     of ctrlChar('P'), UP_ARROW_KEY:
-      # ctrl-N, recall next line in history
+      # ctrl-P, recall Prev line in history
       historyAction(moveUp)
     of ctrlChar('N'),  DOWN_ARROW_KEY, :
-      # ctrl-P, recall Prev line in history
+      # ctrl-N, recall next line in history
       historyAction(moveDown)
     of ctrlChar('R'), ctrlChar('S'):
-      # ctrl-R, reverse history search
-      # ctrl-S, forward history search
-      if self.history.atBottom() and not self.historyCallRecent:
-        self.history.updateLast(self.line.getLine())
-      let key = self.incrementalHistorySearch(c)
-      self.terminatingKeyStroke = key
-      if key <= 0: # return on error/cancel
-        return editContinue
+      when promptIncrementalHistorySearch:
+        # ctrl-R, reverse history search
+        # ctrl-S, forward history search
+        if self.history.atBottom() and not self.historyCallRecent:
+          self.history.updateLast(self.line.getLine())
+        let key = self.incrementalHistorySearch(c)
+        self.terminatingKeyStroke = key
+        if key <= 0: # return on error/cancel
+          return editContinue
+      else:
+        self.historyCallRecent = false
+        result = editNext
     of altChar('<'), PAGE_UP_KEY:
       # meta-<, beginning of history
       # Page Up, beginning of history
