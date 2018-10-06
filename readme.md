@@ -115,7 +115,8 @@ main()
 
   # Incremental history search
     CTRL-R, CTRL-S               forward/reverse interactive history search
-       TAB                       rotate between history alternatives
+       TAB, DOWN_ARROW_KEY       rotate between history alternatives(+)
+       UP_ARROW_KEY              rotate between history alternatives(-)
        ESC, CTRL-C               cancel selection and exit to normal editing
        Other keys                accept selected history
 
