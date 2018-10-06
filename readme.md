@@ -164,6 +164,7 @@ main()
   * prompt_no_completion
   * prompt_no_word_editing
   * prompt_no_preload_buffer
+  * prompt_no_incremental_history_search(if you disabled history, this one also disabled)
 
   Altough you can use `killSetMaxLen` and `historySetMaxLen` at runtime,
   there are compile time options to set them too. e.g. `-d:DefaultHistoryMaxLen=150`

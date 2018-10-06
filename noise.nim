@@ -16,6 +16,7 @@ const
   promptCompletion* = not defined(prompt_no_completion)
   promptWordEditing* = not defined(prompt_no_word_editing)
   promptPreloadBuffer* = not defined(prompt_no_preload_buffer)
+  promptIncrementalHistorySearch* = promptHistory and not defined(prompt_no_incremental_history_search)
 
 include noise/lineImpl
 

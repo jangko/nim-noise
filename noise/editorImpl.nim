@@ -53,7 +53,7 @@ when promptCompletion:
 
       # deliberate fall-through here, so we use the terminating character
 
-when promptHistory:
+when promptIncrementalHistorySearch:
   proc terminatingKey(c: char32): bool =
     const keys = [ctrlChar('P'), ctrlChar('N'), ctrlChar('R'), ctrlChar('S'),
       altChar('<'), PAGE_UP_KEY, altChar('>'), PAGE_DOWN_KEY, altChar('d'), altChar('D'), META + ctrlChar('H'),
@@ -184,6 +184,7 @@ when promptHistory:
         addOnechar(search, c)
         self.refreshLine(search, prompt)
 
+when promptHistory:
   proc historySearch(self: var Noise, c: char32): EditMode {.cdecl.} =
     template historyAction(cmd: untyped): untyped =
       if self.history.available:
@@ -202,14 +203,18 @@ when promptHistory:
       # ctrl-N, recall next line in history
       historyAction(moveDown)
     of ctrlChar('R'), ctrlChar('S'):
-      # ctrl-R, reverse history search
-      # ctrl-S, forward history search
-      if self.history.atBottom() and not self.historyCallRecent:
-        self.history.updateLast(self.line.getLine())
-      let key = self.incrementalHistorySearch(c)
-      self.terminatingKeyStroke = key
-      if key <= 0: # return on error/cancel
-        return editContinue
+      when promptIncrementalHistorySearch:
+        # ctrl-R, reverse history search
+        # ctrl-S, forward history search
+        if self.history.atBottom() and not self.historyCallRecent:
+          self.history.updateLast(self.line.getLine())
+        let key = self.incrementalHistorySearch(c)
+        self.terminatingKeyStroke = key
+        if key <= 0: # return on error/cancel
+          return editContinue
+      else:
+        self.historyCallRecent = false
+        result = editNext
     of altChar('<'), PAGE_UP_KEY:
       # meta-<, beginning of history
       # Page Up, beginning of history

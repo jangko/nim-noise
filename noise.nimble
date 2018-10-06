@@ -13,9 +13,11 @@ task test, "Run all tests":
   exec "nim c -d:prompt_no_completion examples/test"
   exec "nim c -d:prompt_no_word_editing examples/test"
   exec "nim c -d:prompt_no_preload_buffer examples/test"
+  exec "nim c -d:prompt_no_incremental_history_search examples/test"
 
   exec "nim c -d:release -d:prompt_no_history examples/test"
   exec "nim c -d:release -d:prompt_no_kill examples/test"
   exec "nim c -d:release -d:prompt_no_completion examples/test"
   exec "nim c -d:release -d:prompt_no_word_editing examples/test"
   exec "nim c -d:release -d:prompt_no_preload_buffer examples/test"
+  exec "nim c -d:release -d:prompt_no_incremental_history_search examples/test"
