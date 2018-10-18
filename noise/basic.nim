@@ -55,7 +55,7 @@ proc isControlChar*(testChar: char32): bool =
            (testChar >= 0x7F and testChar <= 0x9F) # DEL and C1 controls
 
 proc beep*() =
-  stderr.write("\x7") # ctrl-G == bell/beep
+  stderr.write("\x07") # ctrl-G == bell/beep
   stderr.flushFile()
 
 # Calculate a new screen position given a starting position, screen width and
