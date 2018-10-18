@@ -12,7 +12,7 @@ Nim implementation of linenoise command line editor, inspired by
   * Line editing with emacs keybindings
   * History handling
   * Completion
-  * UTF-8 aware
+  * Unicode aware
   * Intuitive ESC key sub menu escaping
   * Incremental history search
   * Support multiline editing out of the box
@@ -171,6 +171,16 @@ main()
 
   * DefaultHistoryMaxLen
   * DefaultKillRingMaxLen
+
+## Unicode awareness
+
+On posix OSes, everything is encoded in UTF-8. On Windows, the API dictates UTF-16 usage.
+Internally, nim-noise use UTF-32 to encode the text and some homebrew encoding to encode keyboard keys.
+Altough this is sound complicated, you as a user will only deal with UTF-8 when interacting with nim-noise.
+If your application only use ASCII subset, then you will not to worry about anything.
+
+When you write your completion callback, add retrieve history, preloaded buffer, 
+you will receive UTF-8 encoded string and give UTF-8/ASCII encoded string too.
 
 ## Installation via nimble
 > nimble install noise
