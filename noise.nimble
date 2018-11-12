@@ -1,5 +1,5 @@
 packageName   = "noise"
-version       = "0.1.2"
+version       = "0.1.3"
 author        = "Andri Lim"
 description   = "noise is a Nim implementation of linenoise"
 license       = "MIT"
@@ -21,3 +21,6 @@ task test, "Run all tests":
   exec "nim c -d:release -d:prompt_no_word_editing examples/test"
   exec "nim c -d:release -d:prompt_no_preload_buffer examples/test"
   exec "nim c -d:release -d:prompt_no_incremental_history_search examples/test"
+
+  exec "nim c -d:release -d:prompt_no_basic examples/primitives"
+  exec "nim c -d:prompt_no_basic examples/primitives"
