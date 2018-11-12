@@ -19,12 +19,16 @@ Nim implementation of linenoise command line editor, inspired by
   * Support multiline prompt with color and unicode characters
   * A bunch of compile time switches to select which features you want to turn on/off
   * Support Windows, Linux and Mac OS
+  * Disable all basic features, then you'll get a cross platform key stroke libray
 
 ## Planned Features
   * Hints(work in progress)
   * Syntax coloring(work in progress)
 
 ## API
+
+Primitive API(available when prompt_no_basic is defined):
+* proc readChar(): char32
 
 Basic API:
 * proc init*(x: typedesc[Noise]): Noise
@@ -166,6 +170,7 @@ main()
   * prompt_no_word_editing
   * prompt_no_preload_buffer
   * prompt_no_incremental_history_search(if you disabled history, this one also disabled)
+  * prompt_no_basic(disable all features, you'll only have access to primitives API.)
 
   Altough you can use `killSetMaxLen` and `historySetMaxLen` at runtime,
   there are compile time options to set them too. e.g. `-d:DefaultHistoryMaxLen=150`
@@ -182,6 +187,11 @@ If your application only use ASCII subset, then you will not to worry about anyt
 
 When you write your completion callback, add retrieve history, preloaded buffer,
 you will receive UTF-8 encoded string and give UTF-8/ASCII encoded string too.
+
+## Primitives API
+
+Sometimes, when building a console UI, all you need is only a cross platform key stroke library.
+You can use nim-noise like that by specifying promp_no_basic
 
 ## Installation via nimble
 > nimble install noise
