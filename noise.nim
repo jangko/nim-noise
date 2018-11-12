@@ -198,6 +198,9 @@ proc setPrompt*(self: var Noise, text: string) =
   prompt.addCmd(text)
   self.line.setPrompt(prompt, self.screenWidth)
 
+proc getPrompt*(self: var Noise): Styler =
+  self.line.getPrompt()
+
 when promptHistory:
   proc historyAdd*(self: var Noise, line: string) =
     self.history.add line

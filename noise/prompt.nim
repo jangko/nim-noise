@@ -10,7 +10,7 @@ import styler
 
 type
   Prompt* = object
-    text*: Styler        # our copy of the prompt text, edited
+    text*: Styler       # our copy of the prompt text, edited
     numChars*: int      # chars in promptText
     extraLines*: int    # extra lines (beyond 1) occupied by prompt
     width*: int         # column offset to end of prompt

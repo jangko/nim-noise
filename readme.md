@@ -33,6 +33,7 @@ Basic API:
 * proc readLine*(self: var Noise): bool
 * proc setPrompt*(self: var Noise, text: Styler)
 * proc setPrompt*(self: var Noise, text: string)
+* proc getPrompt*(self: var Noise): Styler
 
 History API:
 * proc historyAdd*(self: var Noise, line: string)
@@ -179,7 +180,7 @@ Internally, nim-noise use UTF-32 to encode the text and some homebrew encoding t
 Altough this is sound complicated, you as a user will only deal with UTF-8 when interacting with nim-noise.
 If your application only use ASCII subset, then you will not to worry about anything.
 
-When you write your completion callback, add retrieve history, preloaded buffer, 
+When you write your completion callback, add retrieve history, preloaded buffer,
 you will receive UTF-8 encoded string and give UTF-8/ASCII encoded string too.
 
 ## Installation via nimble

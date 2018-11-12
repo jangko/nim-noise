@@ -415,6 +415,9 @@ when promptWordEditing:
 proc setPrompt(self: var Line, text: Styler, screenWidth: int) =
   self.prompt.recalculate(text, screenWidth)
 
+proc getPrompt(self: Line): Styler =
+  self.prompt.text
+
 when promptPreloadBuffer:
   proc preloadBuffer(self: var Line, text: string) =
     self.dataLen = utf8to32(text, self.data)
