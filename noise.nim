@@ -264,6 +264,7 @@ when promptPreloadBuffer:
           inc pos
           if c notin WhiteSpace: break
         temp.add ' '
+        temp.add c
       else:
         temp.add c
         inc pos
