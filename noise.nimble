@@ -1,4 +1,4 @@
-packageName   = "noise"
+# packageName   = "noise"
 version       = "0.1.3"
 author        = "Andri Lim"
 description   = "noise is a Nim implementation of linenoise"
