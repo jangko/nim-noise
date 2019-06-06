@@ -80,7 +80,7 @@ install:
 
 build_script:
   - cd C:\projects\%APPVEYOR_PROJECT_SLUG%
-  - nimble install -y --verbose
+  #- nimble install -y --verbose
 test_script:
   - nimble test
 
