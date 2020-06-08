@@ -324,6 +324,10 @@ proc basicEditing(self: var Noise, c: char32): EditMode {.cdecl.} =
     else:
       result = editExit
     self.keyType = ktCtrlD
+  of ctrlChar('X'):
+    # ctrl-X, for custom implementations
+    self.keyType = ktCtrlX
+    result = editExit
   of ctrlChar('J'), ctrlChar('M'):
     # ctrl-J/linefeed/newline, accept line
     # ctrl-M/return/enter
