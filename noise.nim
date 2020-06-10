@@ -26,6 +26,7 @@ when promptBasic:
       ktNone
       ktCtrlC
       ktCtrlD
+      ktCtrlX
 
     EditMode = enum
       editOK
