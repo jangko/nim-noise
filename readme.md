@@ -19,7 +19,7 @@ Nim implementation of linenoise command line editor, inspired by
   * Support multiline prompt with color and unicode characters
   * A bunch of compile time switches to select which features you want to turn on/off
   * Support Windows, Linux and Mac OS
-  * Disable all basic features, then you'll get a cross platform key stroke libray
+  * Disable all basic features, then you'll get a cross platform key stroke library
 
 ## Planned Features
   * Hints(work in progress)
@@ -31,32 +31,32 @@ Primitive API(available when prompt_no_basic is defined):
 * proc readChar(): char32
 
 Basic API:
-* proc init*(x: typedesc[Noise]): Noise
-* proc getKeyType*(self: Noise): KeyType
-* proc getLine*(self: var Noise): string
-* proc readLine*(self: var Noise): bool
-* proc setPrompt*(self: var Noise, text: Styler)
-* proc setPrompt*(self: var Noise, text: string)
-* proc getPrompt*(self: var Noise): Styler
+* proc init(x: typedesc[Noise]): Noise
+* proc getKeyType(self: Noise): KeyType
+* proc getLine(self: var Noise): string
+* proc readLine(self: var Noise): bool
+* proc setPrompt(self: var Noise, text: Styler)
+* proc setPrompt(self: var Noise, text: string)
+* proc getPrompt(self: var Noise): Styler
 
 History API:
-* proc historyAdd*(self: var Noise, line: string)
-* proc historySetMaxLen*(self: var Noise, len: int)
-* iterator histories*(self: var Noise): string
-* iterator historyPairs*(self: var Noise): (int, string)
-* proc historySave*(self: var Noise, fileName: string): bool
-* proc historyLoad*(self: var Noise, fileName: string): bool
-* proc historyClear*(self: var Noise)
+* proc historyAdd(self: var Noise, line: string)
+* proc historySetMaxLen(self: var Noise, len: int)
+* iterator histories(self: var Noise): string
+* iterator historyPairs(self: var Noise): (int, string)
+* proc historySave(self: var Noise, fileName: string): bool
+* proc historyLoad(self: var Noise, fileName: string): bool
+* proc historyClear(self: var Noise)
 
 Completion API:
-* proc setCompletionHook*(self: var Noise, prc: CompletionHook)
-* proc addCompletion*(self: var Noise, text: string)
+* proc setCompletionHook(self: var Noise, prc: CompletionHook)
+* proc addCompletion(self: var Noise, text: string)
 
 PreloadBuffer API:
-* proc preloadBuffer*(self: var Noise, preloadText: string)
+* proc preloadBuffer(self: var Noise, preloadText: string)
 
 KillRing API:
-* proc killSetMaxLen*(self: var Noise, len: int)
+* proc killSetMaxLen(self: var Noise, len: int)
 
 ## Examples
 ```Nim
@@ -132,7 +132,7 @@ main()
     CTRL-U                       kill all characters to the left of the cursor
     CTRL-W                       kill to whitespace (not word) to left of cursor
     CTRL-Y                       yank killed text
-       ALT-Y                    'yank-pop', rotate popped text
+       ALT-Y                     'yank-pop', rotate popped text
 
   # Word editing
     ALT-C                        give word initial cap
@@ -180,18 +180,18 @@ main()
 
 ## Unicode awareness
 
-On posix OSes, everything is encoded in UTF-8. On Windows, the API dictates UTF-16 usage.
+On Posix OSes, everything is encoded in UTF-8. On Windows, the API dictates UTF-16 usage.
 Internally, nim-noise use UTF-32 to encode the text and some homebrew encoding to encode keyboard keys.
 Altough this is sound complicated, you as a user will only deal with UTF-8 when interacting with nim-noise.
 If your application only use ASCII subset, then you will not to worry about anything.
 
-When you write your completion callback, add retrieve history, preloaded buffer,
+When you write your completion callback, add and retrieve history, preloaded buffer,
 you will receive UTF-8 encoded string and give UTF-8/ASCII encoded string too.
 
 ## Primitives API
 
 Sometimes, when building a console UI, all you need is only a cross platform key stroke library.
-You can use nim-noise like that by specifying promp_no_basic
+You can use nim-noise like that by specifying `prompt_no_basic`.
 
 ## Installation via nimble
 > nimble install noise
