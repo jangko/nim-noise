@@ -303,7 +303,11 @@ proc basicEditing(self: var Noise, c: char32): EditMode {.cdecl.} =
   case c
   of ESC_KEY:
     # ESC KEY escape
-    beep()
+    when defined(esc_exit_editing):
+      self.keyType = ktEsc
+      result = editAccept
+    else:
+      beep()
   of ctrlChar('C'):
     # ctrl-C, abort this line
     self.line.moveCursorRight(moveToEnd)
