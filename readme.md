@@ -178,6 +178,20 @@ main()
   * DefaultHistoryMaxLen
   * DefaultKillRingMaxLen
 
+  * esc_exit_editing
+    
+    While Ctrl-C perform hard abort, `esc_exit_editing` allow soft abort when ESC pressed. 
+    You can get the key type using `getKeyType`.
+    
+    ```Nim
+    while true:
+      let ok = noise.readLine()
+      if not ok: break
+
+      if noise.getKeyType == ktEsc:
+        echo "do something"
+    ```
+    
 ## Unicode awareness
 
 On Posix OSes, everything is encoded in UTF-8. On Windows, the API dictates UTF-16 usage.
