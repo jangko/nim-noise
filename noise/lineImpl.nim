@@ -314,6 +314,8 @@ when promptCompletion:
   const breakChars = makeSet(" =+-/\\*?'`&<>;|@{([])}\"")
 
   proc validChar(self: Line, index: int): bool =
+    if index < 0 or index > self.data.len:
+      return false
     let c = self.data[index]
     result = (c <= 0x7F) and (c.chr notin breakChars)
 
