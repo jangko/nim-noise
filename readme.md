@@ -3,6 +3,7 @@
 [![Windows build status (Appveyor)](https://img.shields.io/appveyor/ci/jangko/nim-noise/master.svg?label=Windows "Windows build status (Appveyor)")](https://ci.appveyor.com/project/jangko/nim-noise)
 ![nimble](https://img.shields.io/badge/available%20on-nimble-yellow.svg?style=flat-square)
 ![license](https://img.shields.io/github/license/citycide/cascade.svg?style=flat-square)
+![Github action](https://github.com/jangko/nim-noise/workflows/nim-noise%20CI/badge.svg)
 
 Nim implementation of linenoise command line editor, inspired by
 [replxx](https://github.com/AmokHuginnsson/replxx) and
@@ -179,10 +180,10 @@ main()
   * DefaultKillRingMaxLen
 
   * esc_exit_editing
-    
-    While Ctrl-C perform hard abort, `esc_exit_editing` allow soft abort when ESC pressed. 
+
+    While Ctrl-C perform hard abort, `esc_exit_editing` allow soft abort when ESC pressed.
     You can get the key type using `getKeyType`.
-    
+
     ```Nim
     while true:
       let ok = noise.readLine()
@@ -191,7 +192,7 @@ main()
       if noise.getKeyType == ktEsc:
         echo "do something"
     ```
-    
+
 ## Unicode awareness
 
 On Posix OSes, everything is encoded in UTF-8. On Windows, the API dictates UTF-16 usage.
