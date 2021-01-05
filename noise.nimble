@@ -7,20 +7,32 @@ skipDirs      = @["examples"]
 
 requires: "nim >= 0.18.1"
 
+### Helper functions
+proc test(env, path: string) =
+  # Compilation language is controlled by TEST_LANG
+  var lang = "c"
+  if existsEnv"TEST_LANG":
+    lang = getEnv"TEST_LANG"
+
+  if not dirExists "build":
+    mkDir "build"
+  exec "nim " & lang & " " & env &
+    " --hints:off --warnings:off " & path
+
 task test, "Run all tests":
-  exec "nim c -d:prompt_no_history examples/test"
-  exec "nim c -d:prompt_no_kill examples/test"
-  exec "nim c -d:prompt_no_completion examples/test"
-  exec "nim c -d:prompt_no_word_editing examples/test"
-  exec "nim c -d:prompt_no_preload_buffer examples/test"
-  exec "nim c -d:prompt_no_incremental_history_search examples/test"
+  test "-d:prompt_no_history", "examples/test"
+  test "-d:prompt_no_kill", "examples/test"
+  test "-d:prompt_no_completion", "examples/test"
+  test "-d:prompt_no_word_editing", "examples/test"
+  test "-d:prompt_no_preload_buffer", "examples/test"
+  test "-d:prompt_no_incremental_history_search", "examples/test"
 
-  exec "nim c -d:release -d:prompt_no_history examples/test"
-  exec "nim c -d:release -d:prompt_no_kill examples/test"
-  exec "nim c -d:release -d:prompt_no_completion examples/test"
-  exec "nim c -d:release -d:prompt_no_word_editing examples/test"
-  exec "nim c -d:release -d:prompt_no_preload_buffer examples/test"
-  exec "nim c -d:release -d:prompt_no_incremental_history_search examples/test"
+  test "-d:release -d:prompt_no_history", "examples/test"
+  test "-d:release -d:prompt_no_kill", "examples/test"
+  test "-d:release -d:prompt_no_completion", "examples/test"
+  test "-d:release -d:prompt_no_word_editing", "examples/test"
+  test "-d:release -d:prompt_no_preload_buffer", "examples/test"
+  test "-d:release -d:prompt_no_incremental_history_search", "examples/test"
 
-  exec "nim c -d:release -d:prompt_no_basic examples/primitives"
-  exec "nim c -d:prompt_no_basic examples/primitives"
+  test "-d:release -d:prompt_no_basic", "examples/primitives"
+  test "-d:prompt_no_basic", "examples/primitives"
