@@ -292,10 +292,10 @@ proc cursorNavigation(self: var Noise, c: char32): EditMode {.cdecl.} =
     self.line.moveCursorRight(moveOne)
   of altChar('f'), altChar('F'), CTRL + RIGHT_ARROW_KEY, META + RIGHT_ARROW_KEY:
     # meta-F, move cursor right by one word
-    self.line.moveCursorLeft(moveOneWord)
+    self.line.moveCursorRight(moveOneWord)
   of altChar('b'), altChar('B'), CTRL + LEFT_ARROW_KEY, META + LEFT_ARROW_KEY:
     # meta-B, move cursor left by one word
-    self.line.moveCursorRight(moveOneWord)
+    self.line.moveCursorLeft(moveOneWord)
   else:
     result = editNext
 
