@@ -16,14 +16,16 @@ platform:
 install:
   - setlocal EnableExtensions EnableDelayedExpansion
 
+  - SET "MINGW_BASE=https://github.com/brechtsanders/winlibs_mingw/releases/download/11.2.0-12.0.1-9.0.0-r1"
+
   - IF "%PLATFORM%" == "x86" (
-      SET "MINGW_ARCHIVE=i686-8.1.0-release-posix-dwarf-rt_v6-rev0.7z" &
-      SET "MINGW_URL=https://sourceforge.net/projects/mingw-w64/files/Toolchains%%20targetting%%20Win32/Personal%%20Builds/mingw-builds/8.1.0/threads-posix/dwarf/i686-8.1.0-release-posix-dwarf-rt_v6-rev0.7z" &
+      SET "MINGW_ARCHIVE=winlibs-x86_64-posix-seh-gcc-11.2.0-mingw-w64-9.0.0-r1.7z" &
+      SET "MINGW_URL=%MINGW_BASE%/%MINGW_ARCHIVE%" &
       SET "MINGW_DIR=mingw32"
     ) ELSE (
       IF "%PLATFORM%" == "x64" (
-        SET "MINGW_ARCHIVE=x86_64-8.1.0-release-posix-seh-rt_v6-rev0.7z" &
-        SET "MINGW_URL=https://sourceforge.net/projects/mingw-w64/files/Toolchains%%20targetting%%20Win64/Personal%%20Builds/mingw-builds/8.1.0/threads-posix/seh/x86_64-8.1.0-release-posix-seh-rt_v6-rev0.7z" &
+        SET "MINGW_ARCHIVE=winlibs-i686-posix-dwarf-gcc-11.2.0-mingw-w64-9.0.0-r1.7z" &
+        SET "MINGW_URL=%MINGW_BASE%/%MINGW_ARCHIVE%" &
         SET "MINGW_DIR=mingw64"
       ) else (
         echo "Unknown platform"
@@ -67,7 +69,7 @@ install:
   - IF DEFINED NEED_REBUILD (
       cd Nim &
       ( IF EXIST "csources" rmdir /s /q csources ) &
-      git clone --depth 1 https://github.com/nim-lang/csources &
+      git clone --depth 1 https://github.com/nim-lang/csources_v1 &
       cd csources &
       ( IF "%PLATFORM%" == "x64" ( build64.bat > nul ) else ( build.bat > nul ) ) &
       cd .. &
