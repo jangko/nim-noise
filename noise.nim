@@ -276,10 +276,10 @@ when promptPreloadBuffer:
       truncated = true
       temp.setLen(PROMPT_MAX_LINE - 1)
 
-    shallowCopy(self.preloadText, temp)
+    self.preloadText = move temp
     if truncated:
       self.preloadError.add " [Edited line: the line length was reduced from "
-      self.preloadError.add "$1 to $1\n" % [$temp.len, $(PROMPT_MAX_LINE - 1)]
+      self.preloadError.add "$1 to $1\n" % [$self.preloadText.len, $(PROMPT_MAX_LINE - 1)]
 
 when promptKill:
   proc killSetMaxLen*(self: var Noise, len: int) =
