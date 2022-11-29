@@ -199,7 +199,7 @@ when promptHistory:
     of ctrlChar('P'), UP_ARROW_KEY:
       # ctrl-P, recall Prev line in history
       historyAction(moveUp)
-    of ctrlChar('N'),  DOWN_ARROW_KEY, :
+    of ctrlChar('N'),  DOWN_ARROW_KEY:
       # ctrl-N, recall next line in history
       historyAction(moveDown)
     of ctrlChar('R'), ctrlChar('S'):
