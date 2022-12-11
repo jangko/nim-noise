@@ -364,9 +364,8 @@ when promptWordEditing:
   proc findWord(self: var Line) =
     if isAlphaNum(self.data[self.pos]):
       # cursor under a word, move to left
-      while self.pos > 0 and isAlphaNum(self.data[self.pos]):
+      while self.pos > 0 and isAlphaNum(self.data[self.pos - 1]):
         dec self.pos
-      if self.pos < self.dataLen: inc self.pos
     else:
       # cursor under something else, move to next word
       while self.pos < self.dataLen and not isAlphaNum(self.data[self.pos]):
