@@ -362,12 +362,8 @@ when promptCompletion:
 when promptWordEditing:
   import unicode
   proc findWord(self: var Line) =
-    if isAlphaNum(self.data[self.pos]):
-      # cursor under a word, move to left
-      while self.pos > 0 and isAlphaNum(self.data[self.pos - 1]):
-        dec self.pos
-    else:
-      # cursor under something else, move to next word
+    if not isAlphaNum(self.data[self.pos]):
+      # cursor not under word, move to next word
       while self.pos < self.dataLen and not isAlphaNum(self.data[self.pos]):
         inc self.pos
 
