@@ -191,6 +191,12 @@ main()
         echo "do something"
     ```
 
+  * prompt_emacs_word_editing
+
+    By default case editing keys will change the case from the beginning of a
+    word, this switch will enable Emacs behavior, where the case is changed from
+    the cursor position until the end of the word.
+
 ## Unicode awareness
 
 On Posix OSes, everything is encoded in UTF-8. On Windows, the API dictates UTF-16 usage.

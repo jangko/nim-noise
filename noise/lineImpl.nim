@@ -363,9 +363,10 @@ when promptWordEditing:
   import unicode
   proc findWord(self: var Line) =
     if isAlphaNum(self.data[self.pos]):
-      # cursor under a word, move to left
-      while self.pos > 0 and isAlphaNum(self.data[self.pos - 1]):
-        dec self.pos
+      # move to the beginning of the word only if emacs behavior is not set
+      if not promptEmacsWordEditing:
+        while self.pos > 0 and isAlphaNum(self.data[self.pos - 1]):
+          dec self.pos
     else:
       # cursor under something else, move to next word
       while self.pos < self.dataLen and not isAlphaNum(self.data[self.pos]):

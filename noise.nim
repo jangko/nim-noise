@@ -15,6 +15,7 @@ const
   promptWordEditing* = not defined(prompt_no_word_editing) and promptBasic
   promptPreloadBuffer* = not defined(prompt_no_preload_buffer) and promptBasic
   promptIncrementalHistorySearch* = promptHistory and not defined(prompt_no_incremental_history_search)
+  promptEmacsWordEditing* = promptWordEditing and defined(prompt_emacs_word_editing)
 
 when promptBasic:
   import noise/[basic, wcwidth, wtf8, styler, prompt], terminal, strutils
