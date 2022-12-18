@@ -364,7 +364,7 @@ when promptWordEditing:
   proc findWord(self: var Line) =
     if isAlphaNum(self.data[self.pos]):
       # move to the beginning of the word only if emacs behavior is not set
-      if not promptEmacsWordEditing:
+      when not promptEmacsWordEditing:
         while self.pos > 0 and isAlphaNum(self.data[self.pos - 1]):
           dec self.pos
     else:
