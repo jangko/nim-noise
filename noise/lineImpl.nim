@@ -59,7 +59,7 @@ proc insertAtCursor(self: var Line, c: char32) =
   self.add(c)
 
 template toOpenArray(self: Line, start, stop: int): auto =
-  toOpenArray(cast[ptr array[0, char32]](self.data[0].unsafeAddr)[], start, stop - 1)
+  toOpenArray(cast[ptr UncheckedArray[char32]](self.data[0].unsafeAddr), start, stop - 1)
 
 proc calcColPos(self: Line, len: int): int =
   let width = mk_wcswidth(self.toOpenArray(0, len))
