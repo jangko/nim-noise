@@ -1,5 +1,5 @@
 # packageName   = "noise"
-version       = "0.1.8"
+version       = "0.1.10"
 author        = "Andri Lim"
 description   = "noise is a Nim implementation of linenoise"
 license       = "MIT"
