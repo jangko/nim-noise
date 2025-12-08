@@ -27,7 +27,7 @@ jobs:
             builder: ubuntu-24.04
           - target:
               os: macos
-            builder: macos-13
+            builder: macos-14
           - target:
               os: windows
             builder: windows-latest
@@ -151,7 +151,7 @@ jobs:
           steps.nim-cache.outputs.cache-hit != 'true'
         uses: actions/checkout@v4
         with:
-          repository: nim-lang/csources_v2
+          repository: nim-lang/csources_v3
           path: csources
           ref: ${{ steps.versions.outputs.csources }}
 
