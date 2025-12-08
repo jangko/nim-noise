@@ -251,7 +251,7 @@ when promptPreloadBuffer:
   #  the provided text will be processed to be usable and will be used to preload
   #  the input buffer on the next call to prompt()
   #  @param preloadText text to begin with on the next call to prompt()
-  proc preloadBuffer*(self: var Noise, preloadText: string) =
+  proc preloadBuffer*(self: var Noise, preloadText: string, collapseWhitespaces: bool = true) =
     if preloadText.len == 0: return
     var
       temp = ""
@@ -260,7 +260,7 @@ when promptPreloadBuffer:
     while pos < preloadText.len:
       var c = preloadText[pos]
       if '\r' == c: continue # silently skip CR
-      if c in WhiteSpace:
+      if collapseWhitespaces and c in WhiteSpace:
         # collapse whitespaces into single ' '
         while pos < preloadText.len:
           c = preloadText[pos]
